@@ -24,7 +24,7 @@ public class gameScreen extends JPanel implements ActionListener, Runnable {
 		img = i.getImage();
 		img = img.getScaledInstance(1200, 365, java.awt.Image.SCALE_SMOOTH);
 
-		time = new Timer(2, this);
+		time = new Timer(1, this);
 		time.start();
 	}
 
