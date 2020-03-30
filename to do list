@@ -1,0 +1,13 @@
+last_date - 21/3/2020
+goal_date - 24/3/2020 
+-------------------------------------------------
+Created by:
+"Nouriel Aronov"
+"Omer Choen"
+-------------------------------------------------
+add enemy class
+add show enemy's button to screen
+add button for attack the enemy
+add utility function for attack in battle
+style the battle(JPanel) class - update the img
+-------------------------------------------------
