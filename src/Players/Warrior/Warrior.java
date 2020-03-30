@@ -7,7 +7,7 @@ public class Warrior extends Player {
 	private String skill;
 	
 	public Warrior( BufferedImage img, String name) {
-		super(200, 100, 100, 20, name, img);
+		super(200, 100, 100, 20, name,"Warrior", img);
 		this.skill = "strongHit";
 	}
 
@@ -43,11 +43,5 @@ public class Warrior extends Player {
 				+ "</body>"
 				+ "</html>";
 		return about;
-	}
-
-	@Override
-	public void startGame() {
-		// TODO Auto-generated method stub
-		
 	}
 }

@@ -8,7 +8,7 @@ public class Pirate extends Player {
 	private String skill;
 	
 	public Pirate(BufferedImage img, String name) {
-		super(120, 80, 60, 140, name, img);
+		super(120, 80, 60, 140, name,"Pirate", img);
 		this.skill = "hiding";
 	}
 
@@ -44,11 +44,5 @@ public class Pirate extends Player {
 				+ "</body>"
 				+ "</html>";
 		return about;
-	}
-
-	@Override
-	public void startGame() {
-		// TODO Auto-generated method stub
-		
 	}
 }

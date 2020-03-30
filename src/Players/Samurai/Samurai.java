@@ -15,25 +15,10 @@ public class Samurai extends Player {
 private String skill;
 	
 	public Samurai(BufferedImage img, String name) {
-		super(100, 60, 100, 100, name, img);
+		super(100, 60, 100, 100, name,"Samurai", img);
 		this.skill = "speed";	
 	}
 	
-	public void startGame() {
-		JFrame SamuraiGameframe = new JFrame();
-		try{   
-			Image icon = ImageIO.read(new File("src\\Images\\Samurai.png"));
-			SamuraiGameframe.setIconImage(icon);
-		}catch(Exception e){
-         e.printStackTrace();
-		}	
-		SamuraiGameframe.add(new gameScreen());
-		SamuraiGameframe.setTitle("Samurai 2-D Test Game");
-		SamuraiGameframe.setSize(700,365);
-		SamuraiGameframe.setResizable(false);
-		SamuraiGameframe.setVisible(true);
-		SamuraiGameframe.setLocationRelativeTo(null);
-	}
 
 	public String getSkill() {
 		return skill;

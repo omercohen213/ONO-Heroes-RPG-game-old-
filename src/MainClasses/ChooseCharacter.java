@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import Players.Player;
+import Players.gameScreen;
 import Players.Hunter.Hunter;
 import Players.Mage.Mage;
 import Players.Pirate.Pirate;
@@ -38,7 +39,7 @@ import Players.Warrior.Warrior;
 public class ChooseCharacter extends StateManager implements ActionListener {
 	private GamePanel gsm;
 	private BufferedImage[] imgArr;
-	private String[] heroes = { "Warrior", "Mage", "Samurai", "Hunter", "Thief", "Pirate" };
+	private String[] playerClasses = { "Warrior", "Mage", "Samurai", "Hunter", "Thief", "Pirate" };
 	private JButton[] buttonsArr;
 	private Player[] PlayersArr;
 	
@@ -47,6 +48,7 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 	private JPanel body;
 	private JLabel description;
 	private JButton startGameBtn;
+	
 	public ChooseCharacter(GamePanel gsm) {
 		super(gsm);
 		this.gsm = gsm;
@@ -61,7 +63,7 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 		this.ChooseCharacterScreen.setLayout(new GridLayout(1,2));
 		this.options = new JPanel();
 		this.options.setBackground(Color.black);
-		this.options.setLayout(new GridLayout(this.heroes.length + 2,1));
+		this.options.setLayout(new GridLayout(this.playerClasses.length + 2,1));
 		JLabel header = new JLabel("Choose your hero", SwingConstants.CENTER);
 		header.setForeground(Color.red);
 		header.setFont(new Font("Courier", Font.BOLD, 40));
@@ -88,9 +90,9 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 
 	// create characters buttons
 	private void createOptionsButtons() {
-		buttonsArr = new JButton[this.heroes.length];
-		for (int i = 0; i < this.heroes.length; i++) {
-			this.buttonsArr[i] = new JButton(this.heroes[i], new ImageIcon(((new ImageIcon(this.imgArr[i])).getImage()).getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
+		buttonsArr = new JButton[this.playerClasses.length];
+		for (int i = 0; i < this.playerClasses.length; i++) {
+			this.buttonsArr[i] = new JButton(this.playerClasses[i], new ImageIcon(((new ImageIcon(this.imgArr[i])).getImage()).getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
 			this.buttonsArr[i].setBackground(Color.black);
 			this.buttonsArr[i].setForeground(Color.white);
 			this.buttonsArr[i].setFont(new Font("Courier", Font.BOLD, 30));
@@ -99,26 +101,26 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 			this.options.add(buttonsArr[i]);
 		}
 		
-		PlayersArr = new Player[this.heroes.length];
-		for (int i = 0; i < this.heroes.length; i++) {
-			switch (heroes[i]) {
+		PlayersArr = new Player[this.playerClasses.length];
+		for (int i = 0; i < this.playerClasses.length; i++) {
+			switch (playerClasses[i]) {
 			case "Warrior": 
-				this.PlayersArr[i] = new Warrior(this.imgArr[i], this.heroes[i]);
+				this.PlayersArr[i] = new Warrior(this.imgArr[i], this.playerClasses[i]);
 				break;
 			case "Mage":
-				this.PlayersArr[i] = new Mage(this.imgArr[i], this.heroes[i]);
+				this.PlayersArr[i] = new Mage(this.imgArr[i], this.playerClasses[i]);
 				break;
 			case "Samurai":
-				this.PlayersArr[i] = new Samurai(this.imgArr[i], this.heroes[i]);
+				this.PlayersArr[i] = new Samurai(this.imgArr[i], this.playerClasses[i]);
 				break;
 			case "Hunter":
-				this.PlayersArr[i] = new Hunter(this.imgArr[i], this.heroes[i]);
+				this.PlayersArr[i] = new Hunter(this.imgArr[i], this.playerClasses[i]);
 				break;
 			case "Thief":
-				this.PlayersArr[i] = new Thief(this.imgArr[i], this.heroes[i]);
+				this.PlayersArr[i] = new Thief(this.imgArr[i], this.playerClasses[i]);
 				break;
 			case "Pirate":
-				this.PlayersArr[i] = new Pirate(this.imgArr[i], this.heroes[i]);
+				this.PlayersArr[i] = new Pirate(this.imgArr[i], this.playerClasses[i]);
 				break;
 			}
 		}
@@ -130,9 +132,8 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 		JButton b = (JButton)source;
-		for (int i = 0; i < this.heroes.length; i++) {
+		for (int i = 0; i < this.playerClasses.length; i++) {
 		    if (b == this.buttonsArr[i]) {
-		    	chosenHero = i;
 		    	this.description.setText(
 						  "<html>"
 						+ "<body style='color:white' 'Clibiri'>"
@@ -154,8 +155,9 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 				}
 		    }
 		}
-		if (b == this.startGameBtn) 
-			this.PlayersArr[chosenHero].startGame();
+		if (b == this.startGameBtn) {	
+			gameScreen.startGame();		
+		}
 	}
 	JLabel img = new JLabel();
 	private void showImage(int i) {
@@ -165,9 +167,9 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 	// initialize the imgArr
 	private void loadImages() {
 		try {
-			this.imgArr = new BufferedImage[this.heroes.length];
-			for (int i = 0; i < this.heroes.length; i++) 
-				this.imgArr[i] = ImageIO.read(new File("src\\Images\\" + this.heroes[i] + ".png"));
+			this.imgArr = new BufferedImage[this.playerClasses.length];
+			for (int i = 0; i < this.playerClasses.length; i++) 
+				this.imgArr[i] = ImageIO.read(new File("src\\Images\\" + this.playerClasses[i] + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 

@@ -10,21 +10,32 @@ public class gameScreen extends JPanel implements ActionListener, Runnable {
 	Dude p;
 	public Image img;
 	Timer time;
-	int v = 172;
+	public int v = 172;
 	Thread animator;
 
 	boolean a = false;
 	boolean done2 = false;
 
+	public static void startGame() {
+		JFrame Gameframe = new JFrame();
+		Gameframe.add(new gameScreen());
+		Gameframe.setTitle("2-D Test Game");
+		Gameframe.setSize(700, 365);
+		Gameframe.setResizable(false);
+		Gameframe.setVisible(true);
+		Gameframe.setLocationRelativeTo(null);
+
+	}
+
 	public gameScreen() {
+		
 		p = new Dude();
 		addKeyListener(new AL());
 		setFocusable(true);
-		ImageIcon i = new ImageIcon("src\\Players\\Samurai\\IMG\\Background_desert.jpg");
+		ImageIcon i = new ImageIcon("src\\Images\\Background_desert.jpg");
 		img = i.getImage();
 		img = img.getScaledInstance(1200, 365, java.awt.Image.SCALE_SMOOTH);
-
-		time = new Timer(1, this);
+		time = new Timer(2, this);
 		time.start();
 	}
 
@@ -96,7 +107,6 @@ public class gameScreen extends JPanel implements ActionListener, Runnable {
 	boolean done = false;
 
 	public void cycle() {
-
 		if (h == false)
 			v-=2;
 		if (v == 100)

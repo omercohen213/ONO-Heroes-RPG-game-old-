@@ -8,7 +8,7 @@ public class Thief extends Player {
 	private String skill;
 	
 	public Thief(BufferedImage img, String name) {
-		super(80, 60, 50, 200, name, img);
+		super(80, 60, 50, 200, name,"Thief", img);
 		this.skill = "hiding";
 	}
 
@@ -46,9 +46,4 @@ public class Thief extends Player {
 		return about;
 	}
 
-	@Override
-	public void startGame() {
-		// TODO Auto-generated method stub
-		
-	}
 }

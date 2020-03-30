@@ -8,7 +8,7 @@ public class Hunter extends Player{
 	private String skill;
 	
 	public Hunter(BufferedImage img, String name) {
-		super(100, 70, 120, 100, name, img);
+		super(100, 70, 120, 100, name,"Hunter", img);
 		this.skill = "arrows";
 	}
 
@@ -44,11 +44,5 @@ public class Hunter extends Player{
 				+ "</body>"
 				+ "</html>";
 		return about;
-	}
-
-	@Override
-	public void startGame() {
-		// TODO Auto-generated method stub
-		
 	}
 }

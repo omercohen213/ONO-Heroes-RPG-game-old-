@@ -1,9 +1,15 @@
 package Players;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 public abstract class Player {
 	private String name;
+	public static String className;
 	private int hp;
 	private int strength;
 	private int mana;
@@ -11,8 +17,8 @@ public abstract class Player {
 	private int xp;
 	private int level;
 	private BufferedImage img;
-	
-	public Player(int hp, int strength, int mana, int speed, String name, BufferedImage img) {
+
+	public Player(int hp, int strength, int mana, int speed, String name, String className, BufferedImage img) {
 		this.xp = 0;
 		this.level = 1;
 		this.hp = hp;
@@ -20,6 +26,7 @@ public abstract class Player {
 		this.mana = mana;
 		this.speed = speed;
 		this.name = name;
+		Player.className = className;
 		this.img = img;
 	}
 
@@ -87,6 +94,9 @@ public abstract class Player {
 		this.img = img;
 	}
 
-	public abstract void startGame();
+	public static String getClassName() {
+		return className;
+	}
+
 	
 }

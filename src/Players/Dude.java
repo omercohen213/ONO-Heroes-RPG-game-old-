@@ -1,6 +1,5 @@
 package Players;
 
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,41 +11,46 @@ import javax.swing.ImageIcon;
 
 public class Dude {
 	int x, y, dirX, dirY, nx, nx2, posX, bulletDirX = 1;
-	Image ninga;
-
-	ImageIcon runToRight = new ImageIcon("src\\Players\\Samurai\\IMG\\Samurai_right.png");
-	ImageIcon runToLeft = new ImageIcon("src\\Players\\Samurai\\IMG\\Samurai_left.png");
-	ImageIcon standToRight = new ImageIcon("src\\Players\\Samurai\\IMG\\Samurai_standing_right.png");
-	ImageIcon standToLeft = new ImageIcon("src\\Players\\Samurai\\IMG\\Samurai_standing_left.png");
-	ImageIcon attackToRight = new ImageIcon("src\\Players\\Samurai\\IMG\\Samurai_attack_right.png");
-	ImageIcon attackToLeft = new ImageIcon("src\\Players\\Samurai\\IMG\\Samurai_attack_left.png");
-	
+	Image ninja;
+	ImageIcon runToRight;
+	ImageIcon runToLeft;
+	ImageIcon standToRight;
+	ImageIcon standToLeft;
+	ImageIcon attackToRight;
+	ImageIcon attackToLeft;
 	int ammo = 100;
 	static ArrayList<Bullet> bullets;// Holds number of bullets on screen
 
 	public Dude() {
+		System.out.print(Player.getClassName());
+		runToRight = new ImageIcon("src\\Players\\"+Player.getClassName()+"\\IMG\\move_right.png");
+		runToLeft = new ImageIcon("src\\Players\\"+Player.getClassName()+"\\IMG\\move_left.png");
+		standToRight = new ImageIcon("src\\Players\\"+Player.getClassName()+"\\IMG\\standing_right.png");
+		standToLeft = new ImageIcon("src\\Players\\"+Player.getClassName()+"\\IMG\\standing_left.png");
+		attackToRight = new ImageIcon("src\\Players\\"+Player.getClassName()+"\\IMG\\attack_right.png");
+		attackToLeft = new ImageIcon("src\\Players\\"+Player.getClassName()+"\\IMG\\attack_left.png");	
+		
 		x = 100;
 		y = 172;
 		posX = 150;
 		nx = 0;
 		nx2 = 685;
-		ninga = standToRight.getImage();
-		ninga = ninga.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
+		ninja = standToRight.getImage();
+		ninja = ninja.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
 		bullets = new ArrayList<Bullet>();// j
 	}
-	
+
 	// Method to run when fired
-	public void fire()
-	{	    	    
+	public void fire() {
 		System.out.println(bullets.size() + " " + ammo);
+		
 		if (ammo > 0) {
-			if(this.bulletDirX == 1) {
-				ninga = attackToRight.getImage();
-				ninga = ninga.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
-			}
-			else {
-				ninga = attackToLeft.getImage();
-				ninga = ninga.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
+			if (this.bulletDirX == 1) {
+				ninja = attackToRight.getImage();
+				ninja = ninja.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
+			} else {
+				ninja = attackToLeft.getImage();
+				ninja = ninja.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
 			}
 			ammo--;
 			Bullet b = new Bullet((posX + 100), y + 30, bulletDirX);
@@ -92,7 +96,6 @@ public class Dude {
 		return dirY;
 	}
 
-
 	public int getNx() {
 		return nx;
 	}
@@ -116,12 +119,10 @@ public class Dude {
 	public int getAmmo() {
 		return ammo;
 	}
-	
-	public Image getImage() {
-		return ninga;
-	}
 
-	
+	public Image getImage() {
+		return ninja;
+	}
 
 	public static ArrayList<Bullet> getBullets() {
 		return bullets;
@@ -132,25 +133,24 @@ public class Dude {
 		if (key == KeyEvent.VK_LEFT) {
 			dirX = -1;
 			bulletDirX = -1;
-			ninga = runToLeft.getImage();
-			ninga = ninga.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH);
+			ninja = runToLeft.getImage();
+			ninja = ninja.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH);
 		}
 
 		else if (key == KeyEvent.VK_RIGHT) {
 			dirX = 1;
 			bulletDirX = 1;
-			ninga = runToRight.getImage();
-			ninga = ninga.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH);
+			ninja = runToRight.getImage();
+			ninja = ninja.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH);
 		}
 
 		else if (key == KeyEvent.VK_UP) {
 			dirY = 1;
 		}
-		
-		else if (key == KeyEvent.VK_SPACE)
-        {
-            fire();
-        }
+
+		else if (key == KeyEvent.VK_SPACE) {
+			fire();
+		}
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -159,15 +159,15 @@ public class Dude {
 		if (key == KeyEvent.VK_LEFT) {
 			dirX = 0;
 			bulletDirX = -1;
-			ninga = standToLeft.getImage();
-			ninga = ninga.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
+			ninja = standToLeft.getImage();
+			ninja = ninja.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
 		}
 
 		else if (key == KeyEvent.VK_RIGHT) {
 			dirX = 0;
 			bulletDirX = 1;
-			ninga = standToRight.getImage();
-			ninga = ninga.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
+			ninja = standToRight.getImage();
+			ninja = ninja.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
 		}
 
 		else if (key == KeyEvent.VK_UP) {

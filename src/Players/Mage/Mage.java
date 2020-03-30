@@ -8,7 +8,7 @@ public class Mage extends Player{
 	private String skill;
 	
 	public Mage(BufferedImage img, String name) {
-		super(150, 80, 300, 10, name, img);
+		super(150, 80, 300, 10, name,"Mage", img);
 		this.skill = "fireBall";
 	}
 
@@ -44,11 +44,5 @@ public class Mage extends Player{
 				+ "</body>"
 				+ "</html>";
 		return about;
-	}
-
-	@Override
-	public void startGame() {
-		// TODO Auto-generated method stub
-		
 	}
 }

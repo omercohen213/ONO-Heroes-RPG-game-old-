@@ -5,9 +5,7 @@ Created by:
 "Nouriel Aronov"
 "Omer Choen"
 -------------------------------------------------
-add enemy class
-add show enemy's button to screen
-add button for attack the enemy
-add utility function for attack in battle
-style the battle(JPanel) class - update the img
+ClassName how to set to public so gameScreen and Dude can use it
+all player characteristics should be public(?)
+
 -------------------------------------------------
