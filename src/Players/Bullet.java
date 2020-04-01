@@ -1,31 +1,39 @@
 package Players;
 
 import java.awt.*;
+import java.util.Random;
+
 import javax.swing.*;
 
-public class Bullet {
-	int x, y; // Controls the CURRENT location of THIS bullet
-
+public class Bullet{
+	double x, y; // Controls the CURRENT location of THIS bullet
+	double distance;
+	double rndDir;
 	Image img;
-
+	Dude dude;
 	boolean visible; // sets weather THIS bullet is visible or not
 	int dir; // the direction
 
-	public Bullet(int startX, int startY, int dir) {
+	public Bullet(double startX, double startY, int dir, Player player,double rndDir,Dude dude) {
 		ImageIcon newBullet;
 		this.dir = dir;
 		if (this.dir == 1)
-			newBullet = new ImageIcon("src\\Players\\" + Player.getClassName() + "\\IMG\\shot_right.png");
+			newBullet = new ImageIcon("src\\Players\\" + player.getClassName() + "\\IMG\\shot_right.png");
 		else
-			newBullet = new ImageIcon("src\\Players\\" + Player.getClassName() + "\\IMG\\shot_left.png");
+			newBullet = new ImageIcon("src\\Players\\" + player.getClassName() + "\\IMG\\shot_left.png");
 		img = newBullet.getImage();
 		img = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		x = startX;
 		y = startY;
+		distance=0;
 		visible = true;
+		this.rndDir=rndDir;
+		this.dude=dude;
+		//System.out.print(rndDir);
+		System.out.print(dude.getY());
 	}
 
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
@@ -33,7 +41,7 @@ public class Bullet {
 		return visible;
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 
@@ -44,14 +52,17 @@ public class Bullet {
 	// Just like the move class in Dude class...
 	public void move() {
 		if (this.dir == 1) {
-			x = x + 2;
-
-			if (x > 630)
+			x = x + 2;						
+			y+=rndDir;
+			distance +=2;		
+			if (distance > 500 || y>720 || y<dude.getY()-650+ 620)
 				visible = false;
+			
 		} else {
 			x = x - 2;
-			// if x > board width Make the bullet invisible
-			if (x < 0)
+			y+=rndDir;
+			distance +=2;
+			if (distance > 500 || y>720 || y<dude.getY()-650+ 620)
 				visible = false;
 		}
 	}

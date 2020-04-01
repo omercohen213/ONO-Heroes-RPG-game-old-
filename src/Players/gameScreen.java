@@ -10,31 +10,30 @@ public class gameScreen extends JPanel implements ActionListener, Runnable {
 	Dude p;
 	public Image img;
 	Timer time;
-	public int v = 172;
 	Thread animator;
 
 	boolean a = false;
 	boolean done2 = false;
 
-	public static void startGame() {
+	public static void startGame(Player player) {
 		JFrame Gameframe = new JFrame();
-		Gameframe.add(new gameScreen());
+		Gameframe.add(new gameScreen(player));
 		Gameframe.setTitle("2-D Test Game");
-		Gameframe.setSize(700, 365);
+		Gameframe.setSize(1000, 1000);
 		Gameframe.setResizable(false);
 		Gameframe.setVisible(true);
 		Gameframe.setLocationRelativeTo(null);
 
 	}
 
-	public gameScreen() {
+	public gameScreen(Player player) {
 		
-		p = new Dude();
+		p = new Dude(player);
 		addKeyListener(new AL());
 		setFocusable(true);
 		ImageIcon i = new ImageIcon("src\\Images\\Background_desert.jpg");
 		img = i.getImage();
-		img = img.getScaledInstance(1200, 365, java.awt.Image.SCALE_SMOOTH);
+		img = img.getScaledInstance(1200, 1000, java.awt.Image.SCALE_SMOOTH);
 		time = new Timer(2, this);
 		time.start();
 	}
@@ -74,23 +73,23 @@ public class gameScreen extends JPanel implements ActionListener, Runnable {
 		if (p.getX() > 590) {
 			g2d.drawImage(img, 685 - p.getNx(), 0, null);
 		}
-		g2d.drawImage(p.getImage(), p.getPosX(), v, null);
+		g2d.drawImage(p.getImage(), (int)p.getPosX(), (int)p.getY(), null);
 
-		if (p.getDirX() == -1) {
+		if (p.getDirX() < 0) {
 			g2d.drawImage(img, 685 - p.getNx2(), 0, null);
-			g2d.drawImage(p.getImage(), p.getPosX(), v, null);
+			g2d.drawImage(p.getImage(), (int)p.getPosX(), (int)p.getY(), null);
 		}
 		/******************************************************/
 		ArrayList<Bullet> bullets = Dude.getBullets();
         for (int i = 0; i < bullets.size(); i++) {
             //This is how to get a current element in an arrayList
              Bullet m = (Bullet) bullets.get(i);//draw:
-            g2d.drawImage(m.getImage(), m.getX(), m.getY(), null);
+            g2d.drawImage(m.getImage(), (int)m.getX(), (int)m.getY(), null);
 
         }
         g2d.setFont(new Font("SanSerif", Font.BOLD, 24));
         g2d.setColor(Color.BLUE);
-        g2d.drawString("Ammo left: " + p.getAmmo(), 500, 50);
+        g2d.drawString("Ammo left: " + p.getAmmo(), 0, 50);
 	}
 
 	private class AL extends KeyAdapter {
@@ -108,12 +107,12 @@ public class gameScreen extends JPanel implements ActionListener, Runnable {
 
 	public void cycle() {
 		if (h == false)
-			v-=2;
-		if (v == 100)
+			p.setY(p.getY() - 2);
+		if (p.getY() == 550)
 			h = true;
-		if (h == true && v <= 172) {
-			v+=2;
-			if (v == 172) {
+		if (h == true && p.getY() <= 650) {
+			p.setY(p.getY() + 2);
+			if (p.getY() == 650) {
 				done = true;
 			}
 		}

@@ -15,7 +15,7 @@ public class Samurai extends Player {
 private String skill;
 	
 	public Samurai(BufferedImage img, String name) {
-		super(100, 60, 100, 100, name,"Samurai", img);
+		super(100, 60, 100, 3, name,"Samurai", img);
 		this.skill = "speed";	
 	}
 	

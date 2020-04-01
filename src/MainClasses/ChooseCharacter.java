@@ -134,6 +134,7 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 		JButton b = (JButton)source;
 		for (int i = 0; i < this.playerClasses.length; i++) {
 		    if (b == this.buttonsArr[i]) {
+		    	chosenHero = i;
 		    	this.description.setText(
 						  "<html>"
 						+ "<body style='color:white' 'Clibiri'>"
@@ -156,7 +157,7 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 		    }
 		}
 		if (b == this.startGameBtn) {	
-			gameScreen.startGame();		
+			gameScreen.startGame(this.PlayersArr[chosenHero]);		
 		}
 	}
 	JLabel img = new JLabel();

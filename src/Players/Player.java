@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 
 public abstract class Player {
 	private String name;
-	public static String className;
+	public String className;
 	private int hp;
 	private int strength;
 	private int mana;
@@ -26,7 +26,7 @@ public abstract class Player {
 		this.mana = mana;
 		this.speed = speed;
 		this.name = name;
-		Player.className = className;
+		this.className = className;
 		this.img = img;
 	}
 
@@ -94,8 +94,12 @@ public abstract class Player {
 		this.img = img;
 	}
 
-	public static String getClassName() {
+	public String getClassName() {
 		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
 	}
 
 	
