@@ -9,13 +9,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import Players.Player;
-import Players.gameScreen;
+import Players.GameScreen;
 
 public class Samurai extends Player {
 private String skill;
 	
 	public Samurai(BufferedImage img, String name) {
-		super(100, 60, 100, 3, name,"Samurai", img);
+		super(100, 60, 100, 3, "omercohen213","Samurai", img);
 		this.skill = "speed";	
 	}
 	

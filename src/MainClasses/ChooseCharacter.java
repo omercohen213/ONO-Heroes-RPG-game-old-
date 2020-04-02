@@ -28,7 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import Players.Player;
-import Players.gameScreen;
+import Players.GameScreen;
 import Players.Hunter.Hunter;
 import Players.Mage.Mage;
 import Players.Pirate.Pirate;
@@ -157,7 +157,7 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 		    }
 		}
 		if (b == this.startGameBtn) {	
-			gameScreen.startGame(this.PlayersArr[chosenHero]);		
+			GameScreen.startGame(this.PlayersArr[chosenHero]);		
 		}
 	}
 	JLabel img = new JLabel();
