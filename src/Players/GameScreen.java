@@ -2,19 +2,33 @@ package Players;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.sun.javafx.geom.RoundRectangle2D;
 
 public class GameScreen extends JPanel implements ActionListener, Runnable {
 	private PlayerSprite PlayerSprite;
-	private Image bgImg; // background image
-	private Timer time; 
+	private Image bgImg; // background
+	private Timer time;
 	private Thread animation;
 	private Player player;
 	private boolean stopAnimation = false;
+	private double regenMana;
+	private BufferedImage hpIcon = null, mpIcon= null, moneyIcon= null;
+	private int count = 0;
+	
 
 	public static void startGame(Player player) {
 		JFrame Gameframe = new JFrame();
@@ -24,39 +38,62 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 		Gameframe.setResizable(false);
 		Gameframe.setVisible(true);
 		Gameframe.setLocationRelativeTo(null);
+		Gameframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public GameScreen(Player player) {
 		this.player = player;
 		PlayerSprite = new PlayerSprite(player);
+
+		player.initLevelsXpArray();		
+		try {
+			hpIcon = ImageIO.read(new File("src\\Images\\hpIcon.png"));
+			mpIcon = ImageIO.read(new File("src\\Images\\mpIcon.png"));
+			moneyIcon = ImageIO.read(new File("src\\Images\\moneyIcon.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// call this when player kills an enemy
+		int xpReward = 15; // should be: xpReward = (enemy.getXpRward);
+		player.levelManager(xpReward);
+
 		addKeyListener(new AL());
 		setFocusable(true);
 		ImageIcon i = new ImageIcon("src\\Images\\Background_desert.jpg");
 		bgImg = i.getImage();
 		bgImg = bgImg.getScaledInstance(1200, 1000, java.awt.Image.SCALE_SMOOTH);
-		time = new Timer(3, this); // sets the delay between each animation
+		time = new Timer(2, this); // sets the delay between each animation
 		time.start();
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		ArrayList<Shot> Shots = PlayerSprite.getShots();
-        for (int i = 0; i < Shots.size(); i++) {
-                
-                 Shot shot = (Shot) Shots.get(i);//This is how to get a current element in an arrayList
-                 if (shot.getVisible() == true) {
-                         shot.move();
-                 }
-                 else Shots.remove(i);
-        }
-        PlayerSprite.move();
-        repaint();
+		for (int i = 0; i < Shots.size(); i++) {
+
+			Shot shot = (Shot) Shots.get(i);// This is how to get a current element in an arrayList
+			if (shot.getVisible() == true) {
+				shot.move();
+			} else
+				Shots.remove(i);
+		}
+		PlayerSprite.move();
+		repaint();
 	}
 
 	public void paint(Graphics g) {
-		if (PlayerSprite.getDirY() == 1 && stopAnimation == false) {			
+		if (PlayerSprite.getDirY() == 1 && stopAnimation == false) {
 			animation = new Thread(this);
 			animation.start();
 			stopAnimation = true;
+		}
+
+		count++;
+		if (count == 100) {
+			count = 0;
+			if (player.getMana() < 100) {
+				player.setMana(player.getMana() + 1);
+			}
 		}
 
 		super.paint(g);
@@ -67,58 +104,80 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 
 		g2d.drawImage(bgImg, 685 - PlayerSprite.getSecondImagePos(), 0, null);
 		if (PlayerSprite.getX() > 590) {
-			g2d.drawImage(bgImg, 685 - PlayerSprite.getSecondImagePos(), 0, null);
+			g2d.drawImage(bgImg, 685 - PlayerSprite.getFirstImagePos(), 0, null);
 		}
-		g2d.drawImage(PlayerSprite.getImage(), (int)PlayerSprite.getPosX(), (int)PlayerSprite.getY(), null);
+		g2d.drawImage(PlayerSprite.getImage(), (int) PlayerSprite.getPosX(), (int) PlayerSprite.getY(), null);
 
 		if (PlayerSprite.getDirX() < 0) {
 			g2d.drawImage(bgImg, 685 - PlayerSprite.getSecondImagePos(), 0, null);
-			g2d.drawImage(PlayerSprite.getImage(), (int)PlayerSprite.getPosX(), (int)PlayerSprite.getY(), null);
+			g2d.drawImage(PlayerSprite.getImage(), (int) PlayerSprite.getPosX(), (int) PlayerSprite.getY(), null);
 		}
 		/******************************************************/
 		ArrayList<Shot> Shots = PlayerSprite.getShots();
-        for (int i = 0; i < Shots.size(); i++) {         
-             Shot shot = (Shot) Shots.get(i);//This is how to get a current element in an arrayList
-            g2d.drawImage(shot.getImage(), (int)shot.getX(), (int)shot.getY(), null);
-        }
-        
-        g2d.setFont(new Font("SanSerif", Font.BOLD, 24));
-        g2d.setColor(Color.black);
-        g2d.drawString("Ammo left: " + PlayerSprite.getAmmo(), 800, 50);
-        
-        
-       //g.draw(new RoundRectangle2D.Double(x, y, w, h, 50, 50));
-        
-        g.drawString("HP: ", 5, 25);
-        g.setColor(Color.gray);
-        g.fillRect(50, 0, 150, 40);
-        
-        g.setColor(Color.green);
-        g.fillRect(50, 0, player.getHp(), 40);
-        
-        g.setColor(Color.white);
-        g.drawRect(50, 0, player.getHp(), 40);
-        
-        g.setColor(Color.black);
-       
-        // **********fix length*************
-       
-        g.drawString("Mana:", 5, 75);
-        g.setColor(Color.gray);
-        g.fillRect(75, 50, 150, 40);
-        
-        g.setColor(Color.blue);
-        g.fillRect(75, 50, player.getMana()*2, 40);
-        
-        g.setColor(Color.white);
-        g.drawRect(75, 50, player.getMana()*2, 40);
-        
-        g2d.setFont(new Font("SanSerif", Font.BOLD, 24));
-        g2d.setColor(Color.black);
-        g2d.drawString(player.getName(), (int)PlayerSprite.getPosX(), (int)PlayerSprite.getY()-20);
-        
-        
-        
+		for (int i = 0; i < Shots.size(); i++) {
+			Shot shot = (Shot) Shots.get(i);// This is how to get a current element in an arrayList
+			g2d.drawImage(shot.getImage(), (int) shot.getX(), (int) shot.getY(), null);
+		}
+
+		
+
+		// show player ammo left
+		g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+		g2d.setColor(Color.black);
+		g2d.drawString("Ammo left: " + PlayerSprite.getAmmo(), 800, 50);
+
+		// player hp bar
+		g2d.drawImage(hpIcon, 2, 27, 20, 20, null);
+		g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+		g2d.drawString("HP: ", 20, 45);
+		g2d.setColor(new Color(34, 139, 34));
+		g2d.fillRoundRect(60, 15, 150, 40, 15, 15);
+		g2d.setColor(Color.green);
+		g2d.fillRoundRect(60, 15, 150 * player.getHp() / player.getMaxHp(), 40, 20, 20);
+		g2d.setColor(Color.black);
+		g2d.drawString(player.getHp() + " / " + player.getMaxHp(), 70, 40);
+		
+		//player mana bar
+		g2d.drawImage(mpIcon, 2, 77, 18, 18, null);	
+		g2d.drawString("MP:", 22, 90);
+		g2d.setColor(new Color(0, 0, 205));
+		g2d.fillRoundRect(60, 65, 150, 40, 15, 15);
+		g2d.setColor(new Color(65, 105, 225));
+		g2d.fillRoundRect(60, 65, 150 * player.getMana() / player.getMaxMana(), 40, 15, 15);
+		g2d.setColor(Color.black);
+		g2d.drawString(player.getMana() + " / " + player.getMaxMana(), 70, 90);
+
+		// regen Mana - instead of count
+		/*
+		 * if (player.getMaxMana()>player.getMana()) { while
+		 * (player.getMaxMana()>player.getMana()) { player.setMana(player.getMana()+1);
+		 * if (player.getMana() + regenMana >= player.getMaxMana())
+		 * player.setMana(player.getMaxMana()); } // timer.schedule(new TimerTask() {
+		 * // @Override // public void run() { // // Your database code here // } // },
+		 * 2*1000);
+		 * 
+		 * 
+		 * }
+		 */		
+
+		// player xp bar
+		g2d.drawString("LVL: " + player.getLevel(), 5, 140);
+		g2d.setColor(new Color(138, 43, 226));
+		g2d.fillRoundRect(70, 115, 150, 40, 15, 15);
+		g2d.setColor(new Color(153, 50, 204));
+		g2d.fillRoundRect(70, 115, player.getXp() * 2, 40, 15, 15);
+		g2d.setColor(Color.black);
+		g2d.drawString(player.getXp() + " / " + player.getlevelUpXp(), 80, 140);
+
+		// player money		
+		g2d.drawImage(moneyIcon, 60, 165, 20, 20, null);
+		g2d.setColor(Color.black);
+		g2d.drawString("Money:   " + player.getMoney(), 5, 180);
+
+		// player name above the playerSprite
+		g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+		g2d.setColor(Color.black);
+		g2d.drawString(player.getName(), (int) PlayerSprite.getPosX(), (int) PlayerSprite.getY() - 20);
 
 	}
 
@@ -149,26 +208,15 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 	}
 
 	public void run() {
-
-		long beforeTime, timeDiff, sleep;
-
-		beforeTime = System.currentTimeMillis();
-
 		while (!stoppedJumping) {
 			cycle();
-
-			timeDiff = System.currentTimeMillis() - beforeTime;
-			sleep = 10 - timeDiff;
-
-			if (sleep < 0)
-				sleep = 2;
+			int sleep = 10;
 			try {
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
 				System.out.println("interrupted");
 			}
 
-			beforeTime = System.currentTimeMillis();
 		}
 		stoppedJumping = false; // set to false so player can jump again after falling
 		isJumping = true; // set to true so player can jump again after falling

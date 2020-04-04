@@ -8,7 +8,7 @@ public class Pirate extends Player {
 	private String skill;
 	
 	public Pirate(BufferedImage img, String name) {
-		super(120, 80, 60, 140, name,"Pirate", img);
+		super(120,120, 80, 60, 140,140, name,"Pirate",0, 51,0, img);
 		this.skill = "hiding";
 	}
 
