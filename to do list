@@ -1,19 +1,23 @@
 -------------------------------------------------
 Created by:
 "Nouriel Aronov"
-"Omer Choen"
+"Omer Cohen"
+"Or Bachar"
 -------------------------------------------------
 edit levelsXp array
 edit mana regeneration instead of count
 sprint
 
-
+	//right left or left right fast and shift -bug
+	// disable shooting while running
+	// running right- release right and press left not running - bug
+	// fix smoke
 more to do:
+add player skills
 add enemies 
 add map 
 add teleport 
 make the whole game inside a JFrame instead of JPanel
-add player skills
 change samurai to melee attack
 
 last update:
@@ -24,3 +28,7 @@ last update:
 5. added player variables: maxHp, maxMana ,xp, levelUpXp, money
 6. mana waste on fire shot
 -------------------------------------------------
+
+Or 20.5.20:
+Adding enemy zombie
+making class "Enemy" an abstract
