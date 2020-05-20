@@ -1,14 +1,18 @@
 package Enemies;
 
-public class Enemy {
+import java.awt.image.BufferedImage;
+
+public abstract class Enemy {
 	private String name;
 	private int hp;
 	private int strength;
 	private int mana;
 	private int speed;
 	private int level;
+	public String className;
+	private BufferedImage img;
 	
-	public Enemy(int hp, int strength, int mana, int speed, int level, String name) {
+	public Enemy(int hp, int strength, int mana, int speed, int level,String className, String name, BufferedImage img) {
 		super();
 		this.hp = hp;
 		this.strength = strength;
@@ -16,8 +20,26 @@ public class Enemy {
 		this.speed = speed;
 		this.level = level;
 		this.name = name;
+		this.className = className;
+		this.img = img;
 	}
-	
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public BufferedImage getImg() {
+		return img;
+	}
+
+	public void setImg(BufferedImage img) {
+		this.img = img;
+	}
+
 	public String getName() {
 		return name;
 	}

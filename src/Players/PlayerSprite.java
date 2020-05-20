@@ -1,18 +1,15 @@
 package Players;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 public class PlayerSprite {
 	private int dirX, dirY; // player movement directions
@@ -22,7 +19,6 @@ public class PlayerSprite {
 	private double posX, y; // player position on the screen
 	private Player player;
 	private Image currentPlayerImg;
-	private boolean sprint;
 
 	private BufferedImage[] stanceImages = new BufferedImage[6];
 	private String[] stance = { "move_right", "move_left", "standing_right", "standing_left", "attack_right",
@@ -33,10 +29,12 @@ public class PlayerSprite {
 	private int manaCost = 2; // this is temporary for all players for only fire attack
 	private ArrayList<Shot> Shots;// Holds number of Shots on screen
 
+	private boolean[] keys = new boolean[500];
+	private boolean runningLeft = false, runningRight = false;
+
 	public PlayerSprite(Player player) {
 		this.player = player;
 		loadImages();// loads the player sprite images
-
 		x = 100;
 		y = 650;
 		posX = 150;
@@ -46,7 +44,6 @@ public class PlayerSprite {
 		currentPlayerImg = currentPlayerImg.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
 		Shots = new ArrayList<Shot>();// j
 		ammo = player.getMana() / manaCost;
-		sprint = false;
 	}
 
 	private void loadImages() {
@@ -164,73 +161,122 @@ public class PlayerSprite {
 		return Shots;
 	}
 
+	public boolean isRunningLeft() {
+		return runningLeft;
+	}
+
+	public boolean[] getKeys() {
+		return keys;
+	}
+
+	public boolean isRunningRight() {
+		return runningRight;
+	}
+	
+	public void setRunningLeft(boolean runningLeft) {
+		this.runningLeft = runningLeft;
+	}
+
+	public void setRunningRight(boolean runningRight) {
+		this.runningRight = runningRight;
+	}
 
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
-			dirX = -1;
-			shotDirX = -1;
-			currentPlayerImg = moveLeft;
-			currentPlayerImg = currentPlayerImg.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH);
-			if(sprint) {
+		if (key == KeyEvent.VK_SHIFT) {
+			keys[key] = true;
+			if (keys[KeyEvent.VK_LEFT] || keys[KeyEvent.VK_RIGHT] || keys[KeyEvent.VK_D] || keys[KeyEvent.VK_A]) {
 				if (player.getMana() >= manaCost) {
-					dirX = 5*dirX;
-					player.setMana(player.getMana() - manaCost);
+					if (dirX > 0) {
+						dirX = 4;
+						runningRight = true;
+						}
+					 else {
+						dirX = -4;
+						runningLeft = true;	
+					}
+					// player.setMana(player.getMana() - manaCost);
 				}
 			}
-		}
-
-		else if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) {
-				dirX = 1;
-				shotDirX = 1;
-				currentPlayerImg = moveRight;
-				currentPlayerImg = currentPlayerImg.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH);
-				if(sprint) {
-					if (player.getMana() >= manaCost) {
-						dirX = 5*dirX;
-						player.setMana(player.getMana() - manaCost);
-					}
+		} else if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
+			keys[key] = true;
+			currentPlayerImg = moveLeft;
+			currentPlayerImg = currentPlayerImg.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH);
+			shotDirX = -1;
+			if (keys[KeyEvent.VK_SHIFT]) {
+				if (player.getMana() >= manaCost) {
+					dirX = -4;
+					runningRight = false;
+					// player.setMana(player.getMana() - manaCost);
 				}
-						
+			} else
+				dirX = -1;
 		}
 
-		else if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W) {
+		else if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D ) { 
+			keys[key] = true;
+			currentPlayerImg = moveRight;
+			currentPlayerImg = currentPlayerImg.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH);
+			shotDirX = 1;
+			if (keys[KeyEvent.VK_SHIFT]) {
+				if (player.getMana() >= manaCost) {
+					dirX = 4;
+					runningLeft = false;
+					// player.setMana(player.getMana() - manaCost);
+				}
+			} else
+				dirX = 1;
+
+		}
+
+		else if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W) { 
 			dirY = 1;
+			
 		}
 
 		else if (key == KeyEvent.VK_SPACE) {
 			fire(); // fire shot
 		}
-		
-		else if (key == KeyEvent.VK_SHIFT) {
-			sprint = true;
-        }
 	}
+
 
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
 
-		if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
+		if (key == KeyEvent.VK_LEFT|| key == KeyEvent.VK_A) {
+			keys[key] = false;
 			dirX = 0;
 			shotDirX = -1;
 			currentPlayerImg = standLeft;
 			currentPlayerImg = currentPlayerImg.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
+			runningLeft = false;
 		}
 
-		else if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) {
+		else if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) {  
+			keys[key] = false;
 			dirX = 0;
 			shotDirX = 1;
 			currentPlayerImg = standRight;
 			currentPlayerImg = currentPlayerImg.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
+			runningRight = false;
 		}
 
-		else if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W) {
+		else if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W) {  
 			dirY = 0;
 		}
-		else if (key == KeyEvent.VK_SHIFT) {
-			sprint = false;
-        }
-	}
 
+		else if (key == KeyEvent.VK_SHIFT) {
+			keys[key] = false;
+			if (keys[KeyEvent.VK_LEFT] || keys[KeyEvent.VK_RIGHT] || keys[KeyEvent.VK_D] || keys[KeyEvent.VK_A]) {
+				// keys[key] = false;
+				if (dirX > 0) {
+					dirX = 1;
+					runningRight = false;
+				} else {
+					dirX = -1;
+					runningLeft = false;
+				}
+			}
+		}
+	}
 }

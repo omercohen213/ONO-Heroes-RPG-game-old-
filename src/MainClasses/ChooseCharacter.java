@@ -165,8 +165,13 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 		if (b == this.startGameBtn) {
 			if(!(this.PlayersArr[chosenHero] instanceof Warrior ||
 	    			this.PlayersArr[chosenHero] instanceof Hunter ||
-	    			this.PlayersArr[chosenHero] instanceof Thief))
-		    		GameScreen.startGame(this.PlayersArr[chosenHero]);	
+	    			this.PlayersArr[chosenHero] instanceof Thief)) {
+				try {
+					GameScreen.startGame(this.PlayersArr[chosenHero]);
+				} catch (IOException ioException) {
+					ioException.printStackTrace();
+				}
+			}
 			// closes the JPanel
 			JComponent comp = (JComponent) e.getSource();
 			Window win = SwingUtilities.getWindowAncestor(comp);

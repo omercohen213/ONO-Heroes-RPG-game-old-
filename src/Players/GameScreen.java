@@ -1,36 +1,37 @@
 package Players;
 
+import Enemies.Enemy;
+import Enemies.EnemySprite;
+import Enemies.Zombie.Zombie;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import com.sun.javafx.geom.RoundRectangle2D;
-
 public class GameScreen extends JPanel implements ActionListener, Runnable {
 	private PlayerSprite PlayerSprite;
+	private EnemySprite EnemySprite;
 	private Image bgImg; // background
 	private Timer time;
 	private Thread animation;
 	private Player player;
+	private Enemy enemy;
 	private boolean stopAnimation = false;
 	private double regenMana;
-	private BufferedImage hpIcon = null, mpIcon= null, moneyIcon= null;
+	private BufferedImage hpIcon = null, mpIcon= null, moneyIcon= null,runSmokeRight=null,runSmokeLeft=null;
 	private int count = 0;
+	private boolean doTime=false;
+	
 	
 
-	public static void startGame(Player player) {
+	public static void startGame(Player player) throws IOException {
 		JFrame Gameframe = new JFrame();
 		Gameframe.add(new GameScreen(player));
 		Gameframe.setTitle("2-D Test Game");
@@ -41,12 +42,16 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 		Gameframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	public GameScreen(Player player) {
+	public GameScreen(Player player) throws IOException {
 		this.player = player;
+		this.enemy = new Zombie("Zombie Omer");
 		PlayerSprite = new PlayerSprite(player);
+		EnemySprite = new EnemySprite(enemy);
 
 		player.initLevelsXpArray();		
 		try {
+			runSmokeLeft = ImageIO.read(new File("src\\Images\\runSmokeLeft.png"));
+			runSmokeRight = ImageIO.read(new File("src\\Images\\runSmokeRight.png"));
 			hpIcon = ImageIO.read(new File("src\\Images\\hpIcon.png"));
 			mpIcon = ImageIO.read(new File("src\\Images\\mpIcon.png"));
 			moneyIcon = ImageIO.read(new File("src\\Images\\moneyIcon.png"));
@@ -99,8 +104,10 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
 
+
+						
 		if ((PlayerSprite.getX() - 590) % 2400 == 0)
-			PlayerSprite.setFirstImagePos(0);
+			PlayerSprite.setFirstImagePos(0);		
 
 		g2d.drawImage(bgImg, 685 - PlayerSprite.getSecondImagePos(), 0, null);
 		if (PlayerSprite.getX() > 590) {
@@ -108,17 +115,32 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 		}
 		g2d.drawImage(PlayerSprite.getImage(), (int) PlayerSprite.getPosX(), (int) PlayerSprite.getY(), null);
 
+
 		if (PlayerSprite.getDirX() < 0) {
 			g2d.drawImage(bgImg, 685 - PlayerSprite.getSecondImagePos(), 0, null);
 			g2d.drawImage(PlayerSprite.getImage(), (int) PlayerSprite.getPosX(), (int) PlayerSprite.getY(), null);
 		}
-		/******************************************************/
+				
 		ArrayList<Shot> Shots = PlayerSprite.getShots();
 		for (int i = 0; i < Shots.size(); i++) {
 			Shot shot = (Shot) Shots.get(i);// This is how to get a current element in an arrayList
 			g2d.drawImage(shot.getImage(), (int) shot.getX(), (int) shot.getY(), null);
 		}
+		
+		int index =(int)PlayerSprite.getPosX()+100;
+		if (PlayerSprite.isRunningLeft()) {	
+			doTime=true;		
+			g2d.drawImage(runSmokeLeft,index, (int)PlayerSprite.getY()+10,200,100, null);
+			
+				
+		}
+		
+		else if (PlayerSprite.isRunningRight()) {
+				g2d.drawImage(runSmokeRight,(int)PlayerSprite.getPosX()-100, (int)PlayerSprite.getY()+10,200,100, null);
+		}
 
+		g2d.drawImage(EnemySprite.getImage(), 150, 650, null);
+		
 		
 
 		// show player ammo left
@@ -193,16 +215,26 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 
 	boolean isJumping = true;
 	boolean stoppedJumping = false;
-
+	
 	public void cycle() {
-		if (isJumping)
+		boolean sprint = PlayerSprite.getKeys()[KeyEvent.VK_SHIFT];
+		if (isJumping) {
 			PlayerSprite.setY(PlayerSprite.getY() - 2);
+			if (PlayerSprite.isRunningRight()) 
+				PlayerSprite.setRunningRight(false);
+			else if (PlayerSprite.isRunningLeft())
+				PlayerSprite.setRunningLeft(false);					
+		}
 		if (PlayerSprite.getY() == 550)
 			isJumping = false;
 		if (!isJumping && PlayerSprite.getY() <= 650) {
 			PlayerSprite.setY(PlayerSprite.getY() + 2);
 			if (PlayerSprite.getY() == 650) {
 				stoppedJumping = true;
+				if (!PlayerSprite.isRunningRight() && sprint) 
+					PlayerSprite.setRunningRight(true);
+				else if (!PlayerSprite.isRunningLeft() && sprint)
+					PlayerSprite.setRunningLeft(true);
 			}
 		}
 	}
