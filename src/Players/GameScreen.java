@@ -121,6 +121,8 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 			g2d.drawImage(bgImg, 685 - PlayerSprite.getSecondImagePos(), 0, null);
 			g2d.drawImage(PlayerSprite.getImage(), (int) PlayerSprite.getPosX(), (int) PlayerSprite.getY(), null);
 		}
+		
+
 				
 		ArrayList<Shot> Shots = PlayerSprite.getShots();
 		for (int i = 0; i < Shots.size(); i++) {
