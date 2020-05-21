@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Zombie extends Enemy {
 
 	public Zombie(String name) throws IOException {
-		super(100, 100, 60, 100, 100, "Zombie",name, ImageIO.read(new File("src\\Images\\Zombie.png")));
+		super(100, 100, 60, 100, 100, "Zombie",name, ImageIO.read(new File("src\\Images\\EnemyZombie.jpg")));
 	}
 
 

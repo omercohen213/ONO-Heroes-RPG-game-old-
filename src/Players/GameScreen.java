@@ -31,8 +31,8 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 	
 	
 
-	public static void startGame(Player player) throws IOException {
-		JFrame Gameframe = new JFrame();
+	public static void startGame(JFrame frame, Player player) throws IOException {
+		JFrame Gameframe = frame;
 		Gameframe.add(new GameScreen(player));
 		Gameframe.setTitle("2-D Test Game");
 		Gameframe.setSize(1000, 1000);
@@ -44,7 +44,7 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 
 	public GameScreen(Player player) throws IOException {
 		this.player = player;
-		this.enemy = new Zombie("Zombie Omer");
+		this.enemy = new Zombie("Zombie");
 		PlayerSprite = new PlayerSprite(player);
 		EnemySprite = new EnemySprite(enemy);
 
@@ -83,6 +83,7 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 				Shots.remove(i);
 		}
 		PlayerSprite.move();
+		EnemySprite.move();
 		repaint();
 	}
 
@@ -131,15 +132,15 @@ public class GameScreen extends JPanel implements ActionListener, Runnable {
 		if (PlayerSprite.isRunningLeft()) {	
 			doTime=true;		
 			g2d.drawImage(runSmokeLeft,index, (int)PlayerSprite.getY()+10,200,100, null);
-			
-				
-		}
+									
+		}		
 		
 		else if (PlayerSprite.isRunningRight()) {
 				g2d.drawImage(runSmokeRight,(int)PlayerSprite.getPosX()-100, (int)PlayerSprite.getY()+10,200,100, null);
 		}
 
-		g2d.drawImage(EnemySprite.getImage(), 150, 650, null);
+		g2d.drawImage(EnemySprite.getImage(), 650, 650, null);
+		System.out.println(EnemySprite.getX());
 		
 		
 

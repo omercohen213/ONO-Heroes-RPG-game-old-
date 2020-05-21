@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements ActionListener{
@@ -13,9 +14,11 @@ public class GamePanel extends JPanel implements ActionListener{
     
     private final int WIDTH = 1000;
     private final int HEIGHT = 1000;
+    private JFrame frame;
     
-    public GamePanel() {
+    public GamePanel(JFrame frame) {
 		super();
+		this.frame = frame;
 		
 		this.setLayout(null);
 		this.setSize(this.WIDTH,this.HEIGHT);
@@ -29,7 +32,7 @@ public class GamePanel extends JPanel implements ActionListener{
         if(state == States.HOMESTATE){
         	gameStates[state.getValue()] = new HomeState(this);       	
         }else if(state == States.CHOOSING_CHARACTER){
-        	gameStates[state.getValue()] = new ChooseCharacter(this);
+        	gameStates[state.getValue()] = new ChooseCharacter(this.frame,this);
         }
         
         this.removeAll();

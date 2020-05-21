@@ -26,6 +26,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -52,10 +53,12 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 	private JPanel body;
 	private JLabel description;
 	private JButton startGameBtn;
+	private JFrame frame;
 
-	public ChooseCharacter(GamePanel gsm) {
+	public ChooseCharacter(JFrame frame,GamePanel gsm) {
 		super(gsm);
 		this.gsm = gsm;
+		this.frame = frame;
 	}
 
 	@Override
@@ -167,15 +170,16 @@ public class ChooseCharacter extends StateManager implements ActionListener {
 	    			this.PlayersArr[chosenHero] instanceof Hunter ||
 	    			this.PlayersArr[chosenHero] instanceof Thief)) {
 				try {
-					GameScreen.startGame(this.PlayersArr[chosenHero]);
+					GameScreen.startGame(this.frame,this.PlayersArr[chosenHero]);
 				} catch (IOException ioException) {
 					ioException.printStackTrace();
 				}
 			}
 			// closes the JPanel
-			JComponent comp = (JComponent) e.getSource();
-			Window win = SwingUtilities.getWindowAncestor(comp);
-			win.dispose();
+			//JComponent comp = (JComponent) e.getSource();
+			//Window win = SwingUtilities.getWindowAncestor(comp);
+			//win.dispose();
+			this.gsm.setVisible(false);
 		}
 	}
 

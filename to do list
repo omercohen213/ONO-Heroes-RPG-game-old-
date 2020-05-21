@@ -14,10 +14,9 @@ sprint
 	// fix smoke
 more to do:
 add player skills
-add enemies 
+add enemies // make the zombie move (AI)
 add map 
 add teleport 
-make the whole game inside a JFrame instead of JPanel
 change samurai to melee attack
 
 last update:

@@ -13,27 +13,20 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import Enemies.Enemy;
 
 public class EnemySprite {
-    private int dirX, dirY; // player movement directions
+    private double dirX=0.1;
     private int firstImagePos, secondImagePos;
-    private int shotDirX = 1; // shot direction; starts right as the player starts standing right
     private double x; // player position after passing the second image ending line at x=1400
     private double posX, y; // player position on the screen
     private Enemy enemy;
-    private Image currentPlayerImg;
+    private Image currentEnemyImg;
 
-    private BufferedImage[] stanceImages = new BufferedImage[6];
-    private String[] stance = { "move_right", "move_left", "standing_right", "standing_left", "attack_right",
-            "attack_left" };
-    private BufferedImage moveRight, moveLeft, standRight, standLeft, attackRight, attackLeft;
-
-    private int ammo;
-    private int manaCost = 2; // this is temporary for all players for only fire attack
-    private ArrayList<Shot> Shots;// Holds number of Shots on screen
-
+    private BufferedImage[] stanceImages = new BufferedImage[2];
+    private String[] stance = { "move_right", "move_left"};
+    private BufferedImage moveRight, moveLeft;
     private boolean[] keys = new boolean[500];
-    private boolean runningLeft = false, runningRight = false;
 
     public EnemySprite(Enemy enemy) {
         this.enemy = enemy;
@@ -43,10 +36,9 @@ public class EnemySprite {
         posX = 150;
         firstImagePos = 0;
         secondImagePos = 685;
-        currentPlayerImg = standRight;
-        currentPlayerImg = currentPlayerImg.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
-        Shots = new ArrayList<Shot>();// j
-        ammo = enemy.getMana() / manaCost;
+        currentEnemyImg = moveRight;
+        currentEnemyImg = currentEnemyImg.getScaledInstance(140, 100, java.awt.Image.SCALE_SMOOTH);
+        System.out.printf(" x: " + x + " posX: " + posX);
     }
 
     private void loadImages() {
@@ -60,32 +52,14 @@ public class EnemySprite {
 
         moveRight = stanceImages[0];
         moveLeft = stanceImages[1];
-        standRight = stanceImages[2];
-        standLeft = stanceImages[3];
-        attackRight = stanceImages[4];
-        attackLeft = stanceImages[5];
     }
 
     public void move() {
-        if (dirX > 0) {// if player is moving right (dirX=1)
-            if (x < 1400) {
-                x += dirX;
-                firstImagePos += dirX;
-                secondImagePos += dirX;
-                if (posX < 150)
-                    posX += dirX;
-            } else if (posX < 820)
-                posX += dirX;
-        } else if (dirX < 0) { // if player is moving left (dirX=-1)
-            if (x > 100) {
-                x += dirX;
-                firstImagePos += dirX;
-                secondImagePos += dirX;
-                if (posX > 540)
-                    posX += dirX;
-            } else if (posX > -50)
-                posX += dirX;
-        }
+//    	if (x < 200) 
+//    		x += dirX;  
+//    	if (x > 200) 
+//             x -= dirX;   	   	
+    	
     }
 
 
@@ -101,12 +75,8 @@ public class EnemySprite {
         this.y = y;
     }
 
-    public int getDirX() {
+    public double getDirX() {
         return dirX;
-    }
-
-    public int getDirY() {
-        return dirY;
     }
 
     public int getFirstImagePos() {
@@ -129,36 +99,13 @@ public class EnemySprite {
         return posX;
     }
 
-    public int getAmmo() {
-        return ammo;
-    }
-
     public Image getImage() {
-        return currentPlayerImg;
+        return currentEnemyImg;
     }
 
-    public ArrayList<Shot> getShots() {
-        return Shots;
-    }
-
-    public boolean isRunningLeft() {
-        return runningLeft;
-    }
 
     public boolean[] getKeys() {
         return keys;
-    }
-
-    public boolean isRunningRight() {
-        return runningRight;
-    }
-
-    public void setRunningLeft(boolean runningLeft) {
-        this.runningLeft = runningLeft;
-    }
-
-    public void setRunningRight(boolean runningRight) {
-        this.runningRight = runningRight;
     }
 
 }

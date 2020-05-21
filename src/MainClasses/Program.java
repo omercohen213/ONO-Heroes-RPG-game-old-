@@ -10,7 +10,7 @@ public class Program {
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
-		GamePanel game = new GamePanel();
+		GamePanel game = new GamePanel(frame);
 		frame.add(game);
 		
 		try{   
