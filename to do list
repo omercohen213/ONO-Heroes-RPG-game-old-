@@ -4,30 +4,38 @@ Created by:
 "Omer Cohen"
 "Or Bachar"
 -------------------------------------------------
-edit levelsXp array
-edit mana regeneration instead of count
-sprint
 
-	//right left or left right fast and shift -bug
-	// disable shooting while running
-	// running right- release right and press left not running - bug
-	// fix smoke
-more to do:
-add player skills
-add enemies // make the zombie move (AI)
-add map 
-add teleport 
-change samurai to melee attack
+-edit levelsXp array
+-edit mana regeneration instead of count
+-sprint:
+	 right left or left right fast and shift -bug
+	 disable shooting while running
+	 running right- release right and press left not running - bug
+	 fix smoke
+-change variable names PosX and x	
+-add player skills
+-add enemies:
+	 make the zombie move (the enemy.x changes but the picture doesn't
+	 AI?
+	 fix EnemySprite function is not called
+-add map 
+-add teleport 
+-change samurai to melee attack
 
-last update:
+
+-------------------------------------------------
+Last Updates:
+
+4.4.20
 1. cant choose warrior, hunter and thief.
 2. closes JPanel on game start
 3. added playerLevelSystem
 4. added xp bar and money; edited bars style
 5. added player variables: maxHp, maxMana ,xp, levelUpXp, money
 6. mana waste on fire shot
--------------------------------------------------
 
-Or 20.5.20:
-Adding enemy zombie
-making class "Enemy" an abstract
+
+21.5.20
+1. Added enemy zombie (but must fix bugs)
+2. The whole game is now on a JFrame and each state chosen makes the JPanel change
+
